@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="usil, infosil, calculadora, notas">
+    <meta name="description" content="PromCalc es una calculadora de notas fácil de usar.">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <title>PromCalc</title>
+    <link rel="stylesheet" href="Estilos/fontello.css">
+    <link rel="stylesheet" href="Estilos/styles.css">
+    <link rel="stylesheet" href="Estilos/bootstrap.min.css">
+    <link rel="icon" href="Imagenes/favico.png">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+    <header class="d-flex flex-wrap justify-content-center py-3 border-bottom"
+        style="background-color: #1e3a8a; position: sticky; top: 0; z-index: 1000;">
+        <div class="container">
+            <div class="row align-items-center w-100">
+                <div class="col-sm-3 col-12 d-flex align-items-center mb-3 mb-sm-0 me-sm-auto text-white"
+                    style="margin-left: 10px;">
+                    <img src="Imagenes/favico.png" alt="Logo" style="width: 60px; height: 60px;">
+                </div>
+                <div class="col-sm-9 col-12 text-center text-white">
+                    <p class="fs-5 fw-bold">¡Bienvenido a PromCalc! <br>La forma rápida y fácil de calcular promedios.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mensaje para alumnos de la USIL -->
+    <div class="usil-note">
+        <p>Este sistema es exclusivo para alumnos de la USIL.</p>
+    </div>
+
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p id="inst">¿Quieres verificar tu promedio actual, explorar cómo cambiaría con otras calificaciones
+                        o simular tu desempeño final? Sigue las indicaciones de la imagen y deja que el programa evalúe
+                        tus notas.</p>
+                    <form id="input">
+                        <div opt="1">
+                            <textarea id="input_scores" class="form-control"
+                                placeholder="Ingresar tabla de notas"></textarea>
+                        </div>
+                        <div opt="2" style="display:none;">
+                            <div id="block_scores"></div>
+                            <div class="input_score variable">
+                                <input type="number" name="level" class="form-control" placeholder="Nivel" min="1"
+                                    required>
+                                <input type="text" name="scoreType" class="form-control"
+                                    placeholder="Tipo de nota (mínimo 1 caracter)" pattern=".*[^ ].*" required>
+                                <input type="number" name="weight" class="form-control" placeholder="Peso%" min="0"
+                                    max="100" step="0.01">
+                                <input type="number" name="score" class="form-control" placeholder="Nota" min="0"
+                                    max="20" step="0.01">
+                                <a href="#" class="delete">&#10005;</a><a href="#" class="add">&#10011;</a>
+                                <div style="clear:both;"></div>
+                            </div>
+                            <p id="deletables">Si el peso de la nota es 0%, se eliminan las <select
+                                    class="form-control"></select> menores notas del grupo.</p>
+                            <div class="input_score static">
+                                <input type="number" name="level" class="form-control" value="1" required
+                                    readonly><input type="text" name="scoreType" class="form-control"
+                                    value="Examen Final" required readonly><input type="number" name="weight"
+                                    class="form-control" placeholder="Peso%" min="0" max="100" step="0.01"
+                                    required><input type="number" name="score" class="form-control" placeholder="Nota"
+                                    min="0" max="20" step="0.01">
+                            </div>
+                            <p id="finalexam"><input type="checkbox"> Este curso no tiene examen final.</p>
+                        </div>
+                    </form>
+                    <div id="control" style="position:relative;">
+                        <div style="margin-bottom:8px; display: inline-block;">
+                            <a href="#" id="evaluate" class="btn btn-primary"><i class="bi bi-check-circle"></i> Evaluar</a>
+                        </div>
+                        <div style="margin-bottom:8px; display: inline-block; margin-left: 10px;">
+                            <a href="#" id="clear" class="btn btn-danger"><i class="bi bi-x-circle"></i> Limpiar</a>
+                        </div>
+                    </div>
+
+                    <div id="result">
+                        <div class="row header">
+                            <div class="scoreType"><span>[Peso, Nota]</span>Tipo de nota</div>
+                            <div class="weight">Peso</div>
+                            <div class="score">Nota</div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div id="chart"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="diagnostic" id="rsltScore"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="diagnostic" id="neddScore"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="detail" class="mt-4">
+                        <div class="subtitle fw-bold">INSTRUCCIONES</div>
+                        <p class="fw-bold">
+                            Accede a Infosil, selecciona la asignatura, verifica las calificaciones y usa el mouse para
+                            seleccionar el contenido hasta la referencia indicada. Luego, sigue las instrucciones.
+                        </p>
+                        <img src="Imagenes/1.png" alt="Instrucciones para inserción de datos simple">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center text-white" style="background-color: #1e3a8a">
+        <div class="container">
+            <div class="row justify-content-center my-2">
+                <div>
+                    <img src="Imagenes/favico.png" alt="Logo de la página" style="max-width: 80px; height: auto;">
+                </div>
+                <div>
+                    <div class="subtitle mb-2 fw-bold" id="faqr">Aclaraciones:</div>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-info-circle"></i> El sistema elimina una o dos calificaciones.</li>
+                        <li><i class="bi bi-info-circle"></i> La evaluación continua se redondea antes del promedio.</li>
+                        <li><i class="bi bi-info-circle"></i> Se admiten cursos en inglés y español.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="Scripts/jquery.js"></script>
+    <script type="text/javascript" src="Scripts/main.min.js"></script>
+    <script type="text/javascript" src="Scripts/principal.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+
+</html>
