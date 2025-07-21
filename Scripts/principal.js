@@ -247,6 +247,15 @@ class GradeManager {
         this.customAlert = new CustomAlert();
     }
 
+    customRound(number) {
+        const decimal = number - Math.floor(number);
+        if (decimal >= 0.5) {
+            return Math.ceil(number);
+        } else {
+            return Math.floor(number);
+        }
+    }
+
     getCurrentAverage() {
         const selectors = [
             '#resultScore',
@@ -350,18 +359,23 @@ class GradeManager {
         }
 
         const { totalWeightedSum, totalCredits } = savedGrades.reduce(
-            (acc, grade) => ({
-                totalWeightedSum: acc.totalWeightedSum + (grade.average * grade.credits),
-                totalCredits: acc.totalCredits + grade.credits
-            }),
+            (acc, grade) => {
+                const roundedGrade = this.customRound(grade.average);
+                return {
+                    totalWeightedSum: acc.totalWeightedSum + (roundedGrade * grade.credits),
+                    totalCredits: acc.totalCredits + grade.credits
+                };
+            },
             { totalWeightedSum: 0, totalCredits: 0 }
         );
 
         const weightedAverage = totalWeightedSum / totalCredits;
 
+        const finalRoundedAverage = this.customRound(weightedAverage);
+
         document.getElementById('weightedAverageValue').innerHTML = `
-            <span class="text-primary">${weightedAverage.toFixed(2)}</span>
-            <small class="text-muted ms-2">(${totalCredits} créditos totales)</small>
+            <small class="text-primary">${weightedAverage.toFixed(2)}</small>
+            <small class="text-muted ms-2">(${totalCredits} créditos)</small>
         `;
         document.getElementById('weightedAverageResult').style.display = 'block';
 
@@ -406,13 +420,20 @@ class GradeManager {
 
     createGradeRow(grade, index) {
         const row = document.createElement('tr');
+
+        // Aplicar redondeo personalizado para mostrar en la tabla
+        const roundedGrade = this.customRound(grade.average);
+
         row.innerHTML = `
             <td>
                 <span class="course-name-display" id="display-name-${index}">${grade.courseName}</span>
                 <input type="text" class="form-control form-control-sm course-name-edit" 
                        id="edit-name-${index}" value="${grade.courseName}" style="display: none;">
             </td>
-            <td>${grade.average.toFixed(2)}</td>
+            <td>
+                <span class="grade-display">${roundedGrade}</span>
+                <small class="text-muted ms-1">(${grade.average.toFixed(2)})</small>
+            </td>
             <td>
                 <span class="course-credits-display" id="display-credits-${index}">${grade.credits}</span>
                 <input type="number" class="form-control form-control-sm course-credits-edit" 
