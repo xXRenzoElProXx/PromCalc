@@ -65,7 +65,42 @@ body {
   line-height: 1.7;
   position: relative;
   min-height: 100vh;
-  padding-bottom: 260px;
+  padding-bottom: 210px;
+}
+
+/* ---------- Scrollbar personalizada ----------
+   Firefox: propiedad estándar scrollbar-color. Webkit/Chromium/Edge:
+   pseudo-elementos ::-webkit-scrollbar*. Misma paleta que el resto del
+   sitio (riel claro tipo "paper", pulgar azul marino con acento dorado
+   al pasar el mouse), para que la barra se sienta parte del diseño y no
+   como el scrollbar gris por defecto del sistema. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue-600) var(--sky-50);
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sky-50);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--blue-600);
+  border-radius: 10px;
+  border: 2px solid var(--sky-50);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--gold-500);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--sky-50);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -720,7 +755,7 @@ tr.average td.nota {
 
 footer {
   background: var(--navy-900);
-  padding: 2.25rem 0;
+  padding: 1.25rem 0;
   color: rgba(255,255,255,0.8);
   position: absolute;
   bottom: 0;
@@ -739,7 +774,7 @@ footer img {
 footer .subtitle.text-white::before { background-color: var(--gold-400); }
 
 footer ul li {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.45rem;
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
@@ -843,7 +878,7 @@ footer ul li i { color: var(--gold-400); font-size: 1rem; margin-top: 0.2rem; }
 /* ---------- Responsive ---------- */
 
 @media (min-width: 768px) {
-  body { padding-bottom: 200px; }
+  body { padding-bottom: 165px; }
   .welcome-text { font-size: 1rem; }
   .logo { width: 48px; height: 48px; }
 }
@@ -930,10 +965,10 @@ footer ul li i { color: var(--gold-400); font-size: 1rem; margin-top: 0.2rem; }
   #weightedAverageResult small { font-size: 0.65rem; display: block; margin-top: 0.25rem; }
 
   .table-responsive { border-radius: 8px; -webkit-overflow-scrolling: touch; overflow-x: auto; }
-  .table-responsive::-webkit-scrollbar { height: 6px; }
+  .table-responsive::-webkit-scrollbar { height: 8px; }
   .table-responsive::-webkit-scrollbar-track { background: var(--sky-50); border-radius: 10px; }
-  .table-responsive::-webkit-scrollbar-thumb { background: var(--ink-300); border-radius: 10px; }
-  .table-responsive::-webkit-scrollbar-thumb:hover { background: var(--ink-500); }
+  .table-responsive::-webkit-scrollbar-thumb { background-color: var(--blue-600); border-radius: 10px; }
+  .table-responsive::-webkit-scrollbar-thumb:hover { background-color: var(--gold-500); }
 }
 
 /* ---------- Alertas y modal (creados dinámicamente desde principal.js) ---------- */
