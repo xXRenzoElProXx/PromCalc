@@ -1,0 +1,1131 @@
+/* ==========================================================================
+   PromCalc — identidad visual "calculadora"
+   Paleta y tipografía inspiradas en el ícono de calculadora (azul/dorado)
+   y en la tabla de notas de Infosil (cabecera marino, celdas en pastilla).
+   ========================================================================== */
+
+:root {
+  /* Marino — cabeceras, fondos oscuros (tono Infosil) */
+  --navy-900: #0b1f3a;
+  --navy-800: #112950;
+  --navy-700: #173568;
+
+  /* Azul — acción primaria (tono de las teclas numéricas) */
+  --blue-700: #1d4ed8;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
+  --blue-100: #dbe8fe;
+
+  /* Dorado — acento, tecla "0" del ícono */
+  --gold-500: #f59e0b;
+  --gold-400: #fbbf24;
+  --gold-100: #fef3c7;
+
+  /* Neutros */
+  --paper: #f5f8fd;
+  --sky-50: #eef4ff;
+  --sky-100: #e1ecfe;
+  --ink-900: #0f172a;
+  --ink-700: #334155;
+  --ink-500: #64748b;
+  --ink-300: #b9c6d9;
+  --white: #ffffff;
+
+  /* Estado */
+  --danger: #dc2626;
+  --danger-dark: #b91c1c;
+  --success: #16a34a;
+  --success-dark: #15803d;
+  --warning: #f59e0b;
+  --info: #2563eb;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-lg: 22px;
+
+  --shadow-card: 0 1px 2px rgba(11, 31, 58, 0.04), 0 10px 24px -8px rgba(11, 31, 58, 0.12);
+  --shadow-card-hover: 0 1px 2px rgba(11, 31, 58, 0.06), 0 20px 36px -12px rgba(11, 31, 58, 0.2);
+
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Easing compartido para las animaciones de aparición nuevas: entra con
+     un poco de energía y se asienta, igual lógica que el "back-to-top". */
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- Base ---------- */
+
+body {
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.06), transparent 45%),
+    radial-gradient(circle at 0% 80%, rgba(245, 158, 11, 0.05), transparent 40%);
+  color: var(--ink-700);
+  line-height: 1.7;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 260px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--navy-900);
+}
+
+/* Pantalla numérica tipo LCD — usada para promedios, notas, etc. */
+.lcd, #weightedAverageValue small.text-primary,
+.grade-display {
+  font-family: "JetBrains Mono", "Space Mono", monospace;
+}
+
+/* ---------- Header ---------- */
+
+header {
+  background: var(--navy-900);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 6px 20px rgba(11, 31, 58, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 3px solid var(--gold-400);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  box-shadow: 0 4px 0 #07142a, 0 6px 14px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover más leve: antes se levantaba 2px con una sombra bastante más
+   marcada; ahora es un desplazamiento mínimo y una sombra apenas más
+   suave, para que se sienta como un detalle y no como un salto.
+   Se restringe a dispositivos con hover real (mouse) para que en touch
+   no quede "pegado" el estado hover tras un tap. */
+@media (hover: hover) and (pointer: fine) {
+  .logo:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 0 #07142a, 0 7px 15px rgba(0, 0, 0, 0.32);
+  }
+}
+
+header h4 {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--white) !important;
+}
+
+.welcome-text {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.usil-note {
+  background: var(--blue-600);
+  color: var(--white);
+  text-align: center;
+  padding: 0.5rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+  position: relative;
+  overflow: hidden;
+}
+
+.usil-note::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.18);
+  transform: skewX(-25deg);
+  animation: shine 4s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  20% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* ---------- Tarjetas ---------- */
+
+.card {
+  border: 1px solid rgba(11, 31, 58, 0.06);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+  overflow: hidden;
+  height: 100%;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.card-header {
+  background: var(--navy-900);
+  color: var(--white);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 1rem 1.5rem;
+  border-bottom: none;
+}
+
+.course-card {
+  background: var(--white);
+  border: 1.5px solid var(--sky-100);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+  position: relative;
+}
+
+.course-card:hover {
+  border-color: var(--blue-500);
+}
+
+.course-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--sky-100);
+}
+
+.course-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  color: var(--blue-700);
+  margin: 0;
+}
+
+.course-form {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+#inst {
+  background-color: var(--sky-50);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.5rem;
+  font-size: 0.98rem;
+  color: var(--ink-700);
+  border-left: 4px solid var(--gold-400);
+}
+
+.instruction-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: var(--blue-600);
+  color: var(--white);
+  border-radius: 9px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 3px 0 var(--blue-700);
+  flex-shrink: 0;
+}
+
+/* El título (badge + texto) va en fila con flexbox: antes el número era
+   un inline-flex suelto dentro del <p>, así que cuando el texto no
+   entraba en una sola línea, la segunda línea arrancaba pegada al borde
+   izquierdo (debajo del número) en vez de alinearse con el texto de la
+   primera línea. */
+.instruction-step p.fw-bold {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: var(--navy-900);
+}
+
+.instruction-title-text {
+  flex: 1;
+  line-height: 1.4;
+  padding-top: 0.1rem;
+}
+
+.subtitle {
+  color: var(--navy-900);
+  margin-bottom: 1.25rem;
+  font-size: 1.15rem;
+  font-family: "Space Grotesk", sans-serif;
+  position: relative;
+  padding-left: 1rem;
+  display: inline-block;
+  font-weight: 700;
+}
+
+.subtitle::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background-color: var(--gold-400);
+  border-radius: 4px;
+}
+
+/* ---------- Formularios ---------- */
+
+textarea.form-control,
+input.form-control,
+.course-name-edit,
+.course-credits-edit {
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--sky-100);
+  background-color: var(--sky-50);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink-900);
+  transition: var(--transition);
+  box-sizing: border-box;
+}
+
+textarea.form-control {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+  resize: none;
+  min-height: calc(1.5em * 6 + 1.5rem);
+}
+
+textarea.form-control:focus,
+input.form-control:focus {
+  border-color: var(--blue-500);
+  background-color: var(--white);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+  outline: none;
+}
+
+/* ---------- Botones — tecla de calculadora ---------- */
+/* Firma visual: cada botón se comporta como una tecla física, con un
+   "canto" inferior sólido que se aplana al presionar. */
+
+.btn {
+  padding: 0.65rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:hover { filter: brightness(1.05); }
+
+.btn:active {
+  transform: translateY(3px);
+}
+
+.btn-primary {
+  background: var(--blue-600);
+  color: white;
+  box-shadow: 0 4px 0 var(--blue-700);
+}
+.btn-primary:hover, .btn-primary:focus { color: white; }
+.btn-primary:active { box-shadow: 0 1px 0 var(--blue-700); }
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+  box-shadow: 0 4px 0 var(--danger-dark);
+}
+.btn-danger:hover, .btn-danger:focus { color: white; }
+.btn-danger:active { box-shadow: 0 1px 0 var(--danger-dark); }
+
+.btn-success {
+  background: var(--success);
+  color: white;
+  box-shadow: 0 4px 0 var(--success-dark);
+}
+.btn-success:hover, .btn-success:focus { color: white; }
+.btn-success:active { box-shadow: 0 1px 0 var(--success-dark); }
+
+.btn-outline-primary {
+  background: var(--white);
+  border: 1.5px solid var(--blue-500);
+  color: var(--blue-700);
+  box-shadow: 0 3px 0 var(--sky-100);
+}
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+  background: var(--blue-600);
+  border-color: var(--blue-600);
+  color: white;
+}
+.btn-outline-primary:active { box-shadow: 0 1px 0 var(--sky-100); }
+
+.btn-outline-secondary {
+  background: var(--white);
+  border: 1.5px solid var(--gold-500);
+  color: #92610a;
+  box-shadow: 0 3px 0 var(--gold-100);
+}
+.btn-outline-secondary:hover, .btn-outline-secondary:focus {
+  background: var(--gold-400);
+  border-color: var(--gold-400);
+  color: var(--navy-900);
+}
+
+.btn-outline-light {
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: white;
+  box-shadow: none;
+}
+.btn-outline-light:hover {
+  background: rgba(255,255,255,0.18);
+  color: white;
+}
+
+.btn-secondary {
+  background: var(--ink-500);
+  color: white;
+  box-shadow: 0 4px 0 #44546b;
+}
+.btn-secondary:active { box-shadow: 0 1px 0 #44546b; }
+
+.btn-sm {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+
+.btn-sm.btn-primary, .btn-sm.btn-success, .btn-sm.btn-danger { box-shadow-width: 3px; }
+.btn-sm.btn-primary { box-shadow: 0 3px 0 var(--blue-700); }
+.btn-sm.btn-success { box-shadow: 0 3px 0 var(--success-dark); }
+.btn-sm.btn-danger { box-shadow: 0 3px 0 var(--danger-dark); }
+
+.btn-lg {
+  padding: 0.85rem 2.25rem;
+  font-size: 1.1rem;
+  border-radius: var(--radius);
+}
+
+.btn-remove-course {
+  background: none;
+  border: 1.5px solid transparent;
+  color: var(--danger);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: var(--transition);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-remove-course:hover {
+  background: var(--danger);
+  color: white;
+  border-color: var(--danger);
+}
+
+.btn-group .btn { margin: 0 2px; position: relative; z-index: 1; }
+.btn-group .btn:first-child { margin-left: 0; }
+.btn-group .btn:last-child { margin-right: 0; }
+
+.btn:disabled, .btn.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(40%);
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.btn i { transition: transform 0.15s ease; }
+
+/* ---------- Tabla de resultados (estilo Infosil) ---------- */
+
+.table-responsive {
+  border-radius: 0 0 var(--radius) var(--radius);
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0;
+}
+
+thead tr { background-color: var(--navy-900); }
+
+thead th {
+  padding: 14px 16px;
+  color: var(--white);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  border-bottom: none;
+}
+
+tbody tr { transition: var(--transition); }
+tbody tr:nth-child(even) { background-color: var(--sky-50); }
+tbody tr:hover { background-color: var(--blue-100); }
+
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--sky-100);
+  vertical-align: middle;
+  color: var(--ink-700);
+}
+
+/* notas mostradas como "pastilla" digital, igual que en Infosil */
+td.nota {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+}
+
+td.nota::before {
+  content: "";
+}
+
+tr.average {
+  background-color: var(--gold-100) !important;
+  font-weight: 700;
+}
+
+tr.average td {
+  border-top: 2px solid var(--gold-400);
+  border-bottom: 2px solid var(--gold-400);
+  color: var(--navy-900);
+}
+
+tr.average td.nota {
+  color: #92610a;
+  font-size: 1.05rem;
+}
+
+#result {
+  display: none;
+  background-color: var(--white);
+  border-radius: var(--radius);
+  padding: 0;
+  margin-top: 2rem;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  border: 1px solid rgba(11,31,58,0.06);
+}
+
+#detail {
+  background-color: var(--white);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(11,31,58,0.06);
+}
+
+#detail img {
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s ease;
+  border: 1px solid var(--sky-100);
+}
+
+/* Antes casi no se notaba (scale 1.015 con el ease genérico); ahora es un
+   levantamiento sutil con sombra más profunda, y solo en mouse/trackpad
+   para que no quede pegado el hover en pantallas táctiles. */
+@media (hover: hover) and (pointer: fine) {
+  #detail img:hover {
+    transform: scale(1.02) translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--blue-100);
+  }
+}
+
+/* ---------- Panel "Promedio Actual" — pantalla tipo LCD ---------- */
+
+.diagnostic {
+  background: linear-gradient(180deg, #142c52, var(--navy-900));
+  border-radius: 0;
+  padding: 1.5rem;
+  height: 100%;
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.diagnostic h5 {
+  color: var(--gold-400) !important;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.diagnostic .result-content {
+  background: linear-gradient(180deg, #c9dcfa, #aac6f2);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.1rem;
+  min-height: 64px;
+  box-shadow: inset 0 2px 6px rgba(11,31,58,0.35);
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #0b2752;
+  text-align: left;
+}
+
+/* Chips para los <select> del simulador "¿Qué pasaría si...?" */
+.diagnostic .result-content select,
+.diagnostic .result-content option {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--navy-900);
+  background: var(--white);
+  border: 1.5px solid var(--blue-500);
+  border-radius: 7px;
+  padding: 1px 6px;
+  margin: 0 2px;
+  vertical-align: middle;
+}
+
+.diagnostic .result-content select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+}
+
+.diagnostic .result-content b,
+.diagnostic .result-content strong {
+  color: #08306b;
+}
+
+.diagnostic .result-content #resultScore,
+.diagnostic .result-content #neededScore,
+.diagnostic .result-content span[stts] {
+  font-weight: 700;
+  color: var(--navy-900);
+  background: rgba(255,255,255,0.55);
+  border-radius: 6px;
+  padding: 1px 7px;
+}
+
+.diagnostic hr { border-color: rgba(255,255,255,0.15); opacity: 1; }
+.diagnostic h6 { color: var(--white); font-weight: 600; }
+
+/* ---------- Botón volver arriba ---------- */
+/* Todo el estado (oculto / visible / hover / press) se maneja ahora con
+   clases y :hover/:active de CSS, no con transition inline pisada desde
+   JS en cada evento — eso era lo que hacía que el color de fondo al
+   pasar el mouse heredara la curva "elástica" pensada solo para la
+   entrada, y se sintiera sin transición real. */
+
+.back-to-top {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--gold-400);
+  color: var(--navy-900);
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 0 var(--gold-500), 0 8px 18px rgba(0,0,0,0.25);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(90px) scale(0.85);
+  z-index: 1000;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    visibility 0s linear 0.35s;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  /* Al aparecer sí se permite un pequeño rebote; al desaparecer se hereda
+     la curva normal de arriba para que la salida sea más discreta. */
+  transition:
+    transform 0.45s var(--ease-pop),
+    opacity 0.3s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    visibility 0s linear 0s;
+}
+
+.back-to-top:hover {
+  background: var(--gold-500);
+  color: var(--navy-900);
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .back-to-top.visible:hover {
+    transform: translateY(-4px) scale(1.04);
+  }
+}
+
+.back-to-top:active {
+  transform: translateY(3px) scale(0.97);
+  box-shadow: 0 1px 0 var(--gold-500);
+}
+
+.back-to-top i { font-size: 1.3rem; font-weight: 700; transition: transform 0.15s ease; }
+.back-to-top:active i { transform: scale(0.9); }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 0.85; }
+}
+
+/* ---------- Footer ---------- */
+
+footer {
+  background: var(--navy-900);
+  padding: 2.25rem 0;
+  color: rgba(255,255,255,0.8);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top: 3px solid var(--gold-400);
+}
+
+footer h5 { color: var(--white) !important; }
+
+footer img {
+  max-width: 56px;
+  border-radius: 12px;
+  box-shadow: 0 3px 0 #07142a;
+}
+
+footer .subtitle.text-white::before { background-color: var(--gold-400); }
+
+footer ul li {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+}
+
+footer ul li i { color: var(--gold-400); font-size: 1rem; margin-top: 0.2rem; }
+
+/* ---------- Tabla de promedios guardados ---------- */
+
+#savedGradesTable { font-size: 0.9rem; }
+#savedGradesTable tbody tr { transition: background-color 0.2s ease; }
+#savedGradesTable tbody tr:hover { background-color: var(--sky-50) !important; }
+
+#savedGradesTable tbody tr:hover td:not(:last-child) { position: relative; }
+
+#savedGradesTable tbody tr:hover td:not(:last-child):after {
+  content: 'Doble clic para editar';
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy-900);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  white-space: nowrap;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-in-out 0.5s forwards;
+  z-index: 1000;
+}
+
+/* Contenedor de botones de acciones: fila que envuelve (flex-wrap), en vez
+   de una columna con anchos en % — eso es lo que hacía que los botones se
+   aplastaran y se salieran de la tarjeta en pantallas angostas. */
+#savedGradesTable .btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  width: auto;
+}
+
+/* Botones cuadrados de tamaño fijo: nunca se aplastan ni se cortan,
+   sin importar cuán angosta sea la columna "Acciones". */
+#savedGradesTable .btn-sm {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.course-name-edit, .course-credits-edit { width: 100%; min-width: 120px; }
+
+.course-name-display, .course-credits-display { display: inline-block; min-height: 1.5em; }
+
+.edit-btn, .save-btn, .cancel-btn, .delete-btn {
+  transition: var(--transition);
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.edit-btn:hover { background-color: var(--blue-600); color: white; }
+.save-btn:hover { background-color: var(--success); color: white; }
+.cancel-btn:hover { background-color: var(--ink-500); color: white; }
+.delete-btn:hover { background-color: var(--danger); color: white; }
+
+.card-footer {
+  background: var(--white);
+  border-top: 1px solid var(--sky-100);
+}
+
+#weightedAverageResult .alert {
+  background: var(--sky-50);
+  border: 1px solid var(--blue-100);
+  border-left: 4px solid var(--blue-600);
+  border-radius: var(--radius-sm);
+}
+
+#weightedAverageResult h6 { color: var(--navy-900); }
+#weightedAverageValue { color: var(--blue-700); }
+
+/* ---------- Foco accesible ---------- */
+
+.btn:focus { outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3); }
+.btn-danger:focus { box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3); }
+.btn-success:focus { box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.3); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (min-width: 768px) {
+  body { padding-bottom: 200px; }
+  .welcome-text { font-size: 1rem; }
+  .logo { width: 48px; height: 48px; }
+}
+
+@media (max-width: 991.98px) {
+  #savedGradesTable { font-size: 0.85rem; }
+  #savedGradesTable th, #savedGradesTable td { padding: 0.5rem 0.3rem; }
+}
+
+@media (max-width: 768px) {
+  #detail img { margin-bottom: 150px; }
+  .card-body { padding: 1.25rem; }
+  .btn { padding: 0.55rem 1.25rem; font-size: 0.9rem; }
+  .subtitle { font-size: 1.05rem; }
+  #inst { font-size: 0.9rem; }
+  td, th { padding: 10px 12px; font-size: 0.9rem; }
+  .instruction-icon { width: 26px; height: 26px; font-size: 0.7rem; }
+  .back-to-top { width: 46px; height: 46px; bottom: 1rem; right: 1rem; }
+  .back-to-top i { font-size: 1.15rem; }
+  .course-form { grid-template-columns: 1fr; }
+  /* Antes quedaba en 1.3rem — más grande que el tamaño de escritorio
+     (0.92rem), lo que hacía que el panel "Promedio Actual" se viera
+     desbordado y los <select> del simulador se amontonaran. */
+  .diagnostic { padding: 1.1rem; }
+  .diagnostic .result-content {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    padding: 0.85rem 0.9rem;
+  }
+  .diagnostic .result-content select,
+  .diagnostic .result-content option {
+    font-size: 0.82rem;
+    padding: 1px 5px;
+  }
+}
+
+.btn:focus { outline: none; }
+
+@media (max-width: 767.98px) {
+  #savedGradesTable { font-size: 0.85rem; }
+  #savedGradesTable tbody tr:hover td:not(:last-child):after { content: 'Doble clic'; font-size: 9px; }
+}
+
+@media (max-width: 575.98px) {
+  #savedGradesTable { font-size: 0.75rem; table-layout: auto; width: 100%; }
+  #savedGradesTable th, #savedGradesTable td { padding: 0.4rem 0.3rem; }
+  #savedGradesTable th:first-child, #savedGradesTable td:first-child { width: 34%; }
+  #savedGradesTable th:nth-child(2), #savedGradesTable td:nth-child(2) { text-align: center; }
+  #savedGradesTable th:nth-child(3), #savedGradesTable td:nth-child(3) { text-align: center; }
+  #savedGradesTable th:last-child, #savedGradesTable td:last-child { text-align: center; }
+  #savedGradesTable td { word-wrap: break-word; overflow-wrap: break-word; }
+  #savedGradesTable .btn-sm { width: 28px; height: 28px; }
+  #savedGradesTable .bi { font-size: 0.75rem; }
+
+  .course-name-edit, .course-credits-edit { font-size: 0.8rem; padding: 0.25rem; width: 100%; max-width: 120px; }
+  .course-name-edit { max-width: 100px; }
+  .course-credits-edit { max-width: 50px; }
+
+  #calculateWeightedAverage { width: 100%; font-size: 0.9rem; padding: 0.5rem; }
+  #calculateWeightedAverage .bi { margin-right: 0.3rem; }
+
+  #clearSaved { font-size: 0.8rem; padding: 0.25rem 0.5rem; }
+
+  #weightedAverageResult .alert { padding: 0.6rem; font-size: 0.85rem; }
+  #weightedAverageResult h6 { font-size: 0.9rem; margin-bottom: 0.5rem; }
+  #weightedAverageValue { font-size: 1.1rem !important; }
+  #weightedAverageResult small { font-size: 0.7rem; }
+
+  #savedGradesTable .btn-sm { min-height: 28px; min-width: 28px; }
+}
+
+@media (max-width: 575.98px) {
+  #savedGrades .card-body { padding: 0.75rem; }
+  #savedGrades .card-header { padding: 0.5rem 0.75rem; font-size: 0.9rem; }
+  #savedGrades .card-footer { padding: 0.5rem 0.75rem; }
+
+  #calculateWeightedAverage { font-size: 0.8rem; padding: 0.4rem; }
+  #clearSaved { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
+  #clearSaved .bi { margin-right: 0.2rem; }
+
+  #weightedAverageResult .alert { padding: 0.4rem; font-size: 0.8rem; }
+  #weightedAverageResult h6 { font-size: 0.85rem; }
+  #weightedAverageValue { font-size: 1rem !important; }
+  #weightedAverageResult small { font-size: 0.65rem; display: block; margin-top: 0.25rem; }
+
+  .table-responsive { border-radius: 8px; -webkit-overflow-scrolling: touch; overflow-x: auto; }
+  .table-responsive::-webkit-scrollbar { height: 6px; }
+  .table-responsive::-webkit-scrollbar-track { background: var(--sky-50); border-radius: 10px; }
+  .table-responsive::-webkit-scrollbar-thumb { background: var(--ink-300); border-radius: 10px; }
+  .table-responsive::-webkit-scrollbar-thumb:hover { background: var(--ink-500); }
+}
+
+/* ---------- Alertas y modal (creados dinámicamente desde principal.js) ---------- */
+
+/* ---------- Blindaje de cascada ----------
+   styles.css debe cargarse DESPUÉS de bootstrap.min.css en el <head>.
+   Estas reglas refuerzan los puntos más visibles por si algún otro
+   archivo se cargara más tarde y pisara la cascada. */
+
+.card-header {
+  background-color: var(--navy-900) !important;
+  color: var(--white) !important;
+}
+
+thead tr, thead th {
+  background-color: var(--navy-900) !important;
+  color: var(--white) !important;
+}
+
+.btn-primary { background-color: var(--blue-600) !important; }
+.btn-danger { background-color: var(--danger) !important; }
+.btn-success { background-color: var(--success) !important; }
+
+header { background-color: var(--navy-900) !important; }
+footer { background-color: var(--navy-900) !important; }
+.diagnostic { background: linear-gradient(180deg, #142c52, var(--navy-900)) !important; }
+
+.custom-alert { font-family: "Inter", sans-serif; }
+.custom-alert .alert-message { font-family: "Inter", sans-serif; }
+.modal-content .btn-cancel, .modal-content .btn-confirm { font-family: "Inter", sans-serif; font-weight: 600; }
+
+/* ==========================================================================
+   ANIMACIONES Y TRANSICIONES — bloque nuevo
+   Todo lo de aquí hacia abajo es agregado: nada de lo anterior fue tocado.
+   Cada regla está pensada para enganchar con los hooks que main.js y
+   principal.js disparan vía clases (ver comentarios en esos archivos).
+   ========================================================================== */
+
+/* --- 1. Aparición del bloque de resultados (#result) ---
+   El JS sigue usando display:none -> block (necesario porque eso es lo que
+   saca el elemento del flujo), pero ahora también alterna la clase
+   .result-enter para disparar este fade + slide hacia arriba. */
+#result.result-enter {
+  animation: resultIn 0.5s var(--ease-pop) both;
+}
+
+@keyframes resultIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- 2. Filas de la tabla de resultados (#chart) con stagger ---
+   main.js le pone a cada <tr> la clase .row-enter y la variable --row-i
+   con su índice; el delay se calcula aquí mismo con calc(). */
+#chart tr.row-enter {
+  animation: rowEnter 0.35s ease-out both;
+  animation-delay: calc(var(--row-i, 0) * 45ms);
+}
+
+@keyframes rowEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- 3. "Tick" de pantalla digital para resultScore / neededScore --- */
+.lcd-tick {
+  animation: lcdTick 0.35s ease-out;
+}
+
+@keyframes lcdTick {
+  0% {
+    opacity: 0.35;
+    filter: brightness(1.8);
+    transform: scale(1.06);
+  }
+  60% {
+    opacity: 1;
+    filter: brightness(1.15);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+    transform: scale(1);
+  }
+}
+
+/* El mismo tick aplicado al bloque del promedio ponderado, para que se
+   sienta consistente con el simulador individual. */
+#weightedAverageResult.lcd-tick #weightedAverageValue {
+  animation: lcdTick 0.4s ease-out;
+}
+
+/* --- 4. Tarjetas de promedios guardados (#savedGradesTable) --- */
+
+/* Entrada con stagger, igual lógica que las filas de #chart. La fila ya
+   trae su propio animation-delay inline (índice * 45ms) desde principal.js. */
+#savedGradesTable tr.grade-row-enter {
+  animation: gradeRowIn 0.3s ease-out both;
+}
+
+@keyframes gradeRowIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Salida: se aplica antes de hacer el splice() real, y el JS espera a que
+   termine (o un timeout de respaldo) para redibujar la tabla. */
+#savedGradesTable tr.grade-row-exit {
+  animation: gradeRowOut 0.22s ease-in forwards;
+}
+
+@keyframes gradeRowOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+    max-height: 60px;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(14px);
+    max-height: 0;
+  }
+}
+
+/* Entrar/salir del modo edición (doble clic): crossfade corto en vez del
+   display swap instantáneo. La clase se agrega al elemento que pasa a
+   estar visible (display ya se resolvió en el JS un instante antes). */
+.field-swap {
+  animation: fieldSwapIn 0.18s ease-out both;
+}
+
+@keyframes fieldSwapIn {
+  from {
+    opacity: 0;
+    transform: translateY(-2px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Resalte sutil de la fila completa mientras está en modo edición, para
+   que el cambio de contexto sea más legible. */
+#savedGradesTable tr.row-editing {
+  background-color: var(--sky-50);
+  box-shadow: inset 3px 0 0 var(--blue-500);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* --- 5. Alertas y modal ---
+   La curva de easing y el doble-rAF para el "enter" ya se ajustaron
+   directamente en principal.js (transition inline, sigue siendo el mismo
+   mecanismo original solicitado por las reglas del proyecto). Aquí solo se
+   agrega un detalle visual: un leve "glow" de entrada en el ícono para
+   reforzar la sensación de aparición. */
+.custom-alert .alert-icon {
+  animation: alertIconPop 0.4s var(--ease-pop);
+}
+
+@keyframes alertIconPop {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #result.result-enter,
+  #chart tr.row-enter,
+  .lcd-tick,
+  #weightedAverageResult.lcd-tick #weightedAverageValue,
+  #savedGradesTable tr.grade-row-enter,
+  #savedGradesTable tr.grade-row-exit,
+  .field-swap,
+  .custom-alert .alert-icon {
+    animation: none !important;
+  }
+}
